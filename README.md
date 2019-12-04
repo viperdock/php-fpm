@@ -9,7 +9,7 @@
 | Source Type | Source         | Docker Tag | Dockerfile Location | Build Context |
 |-------------|----------------|------------|---------------------|---------------|
 | Branch      | /^v([0-9.]+)$/ | {\1}-1.0   | Dockerfile-10       | /             |
-| Branch      | /^v([0-9.]+)$/ | {\1}-2.0   | Dockerfile-20       | /             |
+| Branch      | master         | {\1}-2.0   | Dockerfile-20       | /             |
 
 ## Resources
 
