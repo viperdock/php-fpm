@@ -12,7 +12,6 @@ env:
     - PHP_VERSION=73
     - PHP_VERSION=74
 
-# Installing a newer Docker version
 before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
