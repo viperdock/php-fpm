@@ -1,0 +1,31 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: ['**']
+    tags: ['**']
+  schedule:
+  - cron: 0 0 * * 6
+
+env:
+  TAG_PREFIX: $([ ${GITHUB_REF#refs/*/} == "master" ] && echo "latest" || echo ${GITHUB_REF#refs/*/})
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php_version: ["5.6", "7.0", "7.1", "7.2", "7.3", "7.4", "8.0"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        docker build . --file ./${{ matrix.php_version }}/Dockerfile --tag viperps/php-fpm:${{ env.TAG_PREFIX }}-${{ matrix.php_version }}
+        docker image ls
+
+    - name: Push image to Docker hub
+      if: ${{ success() && (github.repository == 'viperps/php-fpm') && (github.ref == 'refs/heads/master') }}
+      run: |
+        echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin
+        docker push viperps/php-fpm:${{ env.TAG_PREFIX }}-${{ matrix.php_version }}
+        docker logout
